@@ -1,0 +1,834 @@
+/* =====================================================
+   TOCA SOCIAL — TV Leaderboard  |  styles.css
+   RETRO ARCADE / PAC-MAN aesthetic
+   Official Brand Palette:
+     - Pink:  #ff84ff (rgb(255, 132, 255))
+     - Aqua:  #00ffc2 (rgb(0, 255, 194))
+     - Blue:  #0a0037 (rgb(10, 0, 55))
+   Portrait canvas: 1080 × 1920 px
+   ===================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important;   /* Pure pixel aesthetic — no rounded corners */
+}
+
+/* ── Toca Official & Retro Palette ── */
+:root {
+  --toca-blue:    #0a0037;   /* rgb(10, 0, 55) — Fondo corporativo */
+  --toca-aqua:    #00ffc2;   /* rgb(0, 255, 194) — Acento Neón Primario */
+  --toca-pink:    #ff84ff;   /* rgb(255, 132, 255) — Acento Neón Secundario */
+  
+  --bg-deep:      #05001f;   /* Azul ultra oscuro para sombras */
+  --white:        #ffffff;   /* Blanco puro */
+  --gold:         #ffe600;   /* Amarillo Pac-Man / Oro */
+  --gray:         rgba(255, 255, 255, 0.60);
+  --dim:          rgba(255, 255, 255, 0.25);
+  --dimmer:       rgba(255, 255, 255, 0.08);
+
+  --font-px:      'Press Start 2P', monospace;
+  --font-orb:     'Orbitron', 'Share Tech Mono', monospace;
+  --font-mono:    'Share Tech Mono', monospace;
+
+  /* Layout heights */
+  --h-header:     115px;
+  --h-tabs:       84px;
+  --h-mode:       52px;
+  --h-gamehdr:    85px;
+  --h-listhdr:    46px;
+  --h-footer:     64px;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--toca-blue);
+  background: radial-gradient(circle at center 20%, #15004d 0%, var(--toca-blue) 75%, var(--bg-deep) 100%);
+  font-family: var(--font-mono);
+  color: var(--white);
+  -webkit-font-smoothing: none;   /* Crisp pixel rendering */
+  image-rendering: pixelated;
+}
+
+/* ── CRT scanlines ── */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(10, 0, 55, 0.35) 3px,
+    rgba(10, 0, 55, 0.35) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── Screen flicker ── */
+.crt-flicker {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  animation: crtFlicker 8s infinite;
+}
+@keyframes crtFlicker {
+  0%, 94%, 96%, 98%, 100% { opacity: 0; }
+  95%, 97%                { opacity: 0.04; background: var(--toca-aqua); }
+}
+
+/* ── App shell ── */
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ─────────────────────────────────────────
+   BLINK UTILITIES
+───────────────────────────────────────── */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100%{ opacity: 0; }
+}
+.blink-text   { animation: blink 0.9s step-end infinite; }
+.blink-slow   { animation: blink 1.6s step-end infinite; }
+@keyframes pixelPulse {
+  0%, 100% { text-shadow: 0 0 8px currentColor; }
+  50%      { text-shadow: 0 0 22px currentColor, 0 0 35px currentColor; }
+}
+.glow { animation: pixelPulse 2s ease-in-out infinite; }
+
+/* ─────────────────────────────────────────
+   HEADER
+───────────────────────────────────────── */
+header {
+  height: var(--h-header);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  border-bottom: 3px solid var(--toca-aqua);
+  background: rgba(10, 0, 55, 0.95);
+  box-shadow: 0 0 25px rgba(0, 255, 194, 0.25);
+  position: relative;
+  z-index: 10;
+}
+
+/* Neon corner accents */
+header::before, header::after {
+  content: '▮';
+  font-size: 0.65rem;
+  color: var(--toca-pink);
+  position: absolute;
+  bottom: -11px;
+}
+header::before { left: 24px; }
+header::after  { right: 24px; }
+
+/* Logo pixelado oficial */
+.header-left {
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+.toca-logo {
+  height: 62px;
+  max-width: 175px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 194, 0.5));
+}
+
+/* Centro: LEADERBOARD balanceado ópticamente */
+.header-center {
+  position: absolute;
+  left: 44%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+.leaderboard-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  background: rgba(5, 0, 31, 0.85);
+  border: 2px solid var(--toca-pink);
+  box-shadow: 0 0 16px rgba(255, 132, 255, 0.35), inset 0 0 8px rgba(255, 132, 255, 0.15);
+  white-space: nowrap;
+}
+.pill-dot {
+  color: var(--toca-aqua);
+  font-size: 0.65rem;
+  animation: blink 1.2s step-end infinite;
+}
+.header-title {
+  font-family: var(--font-px);
+  font-size: 0.84rem;
+  letter-spacing: 2px;
+  color: var(--white);
+  text-shadow: 0 0 14px rgba(255, 132, 255, 0.8), 0 0 24px rgba(0, 255, 194, 0.5);
+  margin: 0;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Derecha: Reloj y Fecha */
+.header-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  z-index: 2;
+}
+.clock {
+  font-family: var(--font-px);
+  font-size: 0.92rem;
+  color: var(--toca-aqua);
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 16px rgba(0, 255, 194, 0.65);
+  white-space: nowrap;
+}
+.date-text {
+  font-size: 0.44rem;
+  color: var(--toca-pink);
+  letter-spacing: 0.8px;
+  font-weight: 600;
+  opacity: 0.9;
+  text-shadow: 0 0 8px rgba(255, 132, 255, 0.4);
+  white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────
+   GAME TABS
+───────────────────────────────────────── */
+#game-tabs {
+  height: var(--h-tabs);
+  flex-shrink: 0;
+  display: flex;
+  border-bottom: 2px solid rgba(0, 255, 194, 0.25);
+  background: rgba(10, 0, 55, 0.90);
+}
+
+.game-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-family: var(--font-px);
+  font-size: 0.50rem;
+  letter-spacing: 1.5px;
+  color: var(--dim);
+  background: none;
+  border: none;
+  border-right: 1px solid rgba(0, 255, 194, 0.12);
+  border-bottom: 4px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  padding: 4px 6px;
+  text-align: center;
+  line-height: 1.3;
+}
+.game-tab:last-child { border-right: none; }
+.tab-game-logo {
+  height: 42px;
+  max-width: 82px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 5px rgba(0, 255, 194, 0.35));
+  transition: transform 0.2s, filter 0.2s;
+}
+.tab-game-label {
+  display: block;
+}
+
+.game-tab.active {
+  color: var(--toca-aqua);
+  border-bottom-color: var(--toca-pink);
+  background: rgba(0, 255, 194, 0.09);
+  text-shadow: 0 0 12px rgba(0, 255, 194, 0.7);
+}
+.game-tab.active .tab-game-logo {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 8px rgba(0, 255, 194, 0.8)) drop-shadow(0 0 14px rgba(255, 132, 255, 0.5));
+}
+
+/* ─────────────────────────────────────────
+   MODE BAR (HOY vs ALL-TIME)
+───────────────────────────────────────── */
+.mode-bar {
+  height: var(--h-mode);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 14px;
+  border-bottom: 1px solid rgba(0, 255, 194, 0.15);
+  background: rgba(5, 0, 31, 0.65);
+}
+
+.mode-label {
+  font-family: var(--font-px);
+  font-size: 0.52rem;
+  letter-spacing: 2px;
+  color: var(--dim);
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+.mode-label.active-mode {
+  color: var(--toca-aqua);
+  text-shadow: 0 0 14px rgba(0, 255, 194, 0.85);
+}
+#mode-label-alltime.active-mode {
+  color: var(--toca-pink);
+  text-shadow: 0 0 14px rgba(255, 132, 255, 0.85);
+}
+
+.mode-progress {
+  flex: 1;
+  height: 6px;
+  background: rgba(10, 0, 55, 0.8);
+  border: 1px solid rgba(0, 255, 194, 0.25);
+}
+.mode-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--toca-aqua), var(--toca-pink));
+  box-shadow: 0 0 10px rgba(0, 255, 194, 0.6);
+  transition: width 0.15s linear;
+}
+
+/* ─────────────────────────────────────────
+   GAME SUB-HEADER (WITH GAME BACKGROUND IMAGE)
+───────────────────────────────────────── */
+.game-header {
+  height: var(--h-gamehdr);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  border-top: 1px solid rgba(0, 255, 194, 0.25);
+  border-bottom: 2px solid var(--toca-aqua);
+  background-color: var(--toca-blue);
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 35px rgba(10, 0, 55, 0.85), 0 0 15px rgba(0, 255, 194, 0.20);
+  transition: background-image 0.4s ease-in-out;
+}
+.game-title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(10, 0, 55, 0.72);
+  padding: 6px 16px;
+  border-left: 3px solid var(--toca-aqua);
+  box-shadow: 0 0 15px rgba(10, 0, 55, 0.9);
+}
+.game-logo-large {
+  height: 52px;
+  max-width: 95px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 194, 0.7));
+}
+.game-icon-large { font-size: 1.7rem; }
+.game-name-large {
+  font-family: var(--font-px);
+  font-size: 0.95rem;
+  letter-spacing: 4px;
+  color: var(--white);
+  text-shadow: 0 0 16px rgba(0, 255, 194, 0.8), 0 0 24px rgba(0, 255, 194, 0.4);
+}
+.game-mode-badge {
+  font-family: var(--font-px);
+  font-size: 0.52rem;
+  letter-spacing: 2px;
+  color: var(--toca-pink);
+  border: 2px solid var(--toca-pink);
+  background: rgba(10, 0, 55, 0.82);
+  padding: 8px 16px;
+  text-shadow: 0 0 10px rgba(255, 132, 255, 0.7);
+  box-shadow: 0 0 12px rgba(255, 132, 255, 0.35);
+}
+
+/* ─────────────────────────────────────────
+   LIST COLUMN HEADERS
+───────────────────────────────────────── */
+.list-header {
+  height: var(--h-listhdr);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  border-bottom: 1px solid rgba(0, 255, 194, 0.22);
+  background: rgba(5, 0, 31, 0.8);
+}
+.lh-rank  { width: 58px; flex-shrink: 0; font-family: var(--font-px); font-size: 0.48rem; letter-spacing: 1px; color: var(--toca-aqua); text-align: center; }
+.lh-name  { width: 230px; flex-shrink: 0; font-family: var(--font-px); font-size: 0.48rem; letter-spacing: 1px; color: var(--toca-aqua); }
+.lh-bar   { flex: 1; }
+.lh-score { width: 180px; flex-shrink: 0; font-family: var(--font-px); font-size: 0.48rem; letter-spacing: 1px; color: var(--toca-aqua); text-align: right; }
+
+/* ─────────────────────────────────────────
+   SCORE LIST
+───────────────────────────────────────── */
+.score-list {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Single Row ── */
+.score-row {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  flex: 1;
+  border-bottom: 1px solid rgba(0, 255, 194, 0.10);
+  background: rgba(10, 0, 55, 0.70);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: rowAppear 0.3s ease forwards;
+  animation-delay: calc(var(--row-idx, 0) * 40ms);
+}
+.score-row:last-child { border-bottom: none; }
+
+@keyframes rowAppear {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Row left accent glow */
+.score-row::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: transparent;
+  transition: background 0.3s;
+}
+
+/* Puesto 1: Pink Neón de Toca Social */
+.score-row.rank-1::before { background: var(--toca-pink); box-shadow: 0 0 14px var(--toca-pink); }
+.score-row.rank-1 { background: rgba(255, 132, 255, 0.08); }
+
+/* Puesto 2: Aqua Neón de Toca Social */
+.score-row.rank-2::before { background: var(--toca-aqua); box-shadow: 0 0 14px var(--toca-aqua); }
+.score-row.rank-2 { background: rgba(0, 255, 194, 0.06); }
+
+/* Puesto 3: Oro / Amarillo Retro */
+.score-row.rank-3::before { background: var(--gold); box-shadow: 0 0 14px var(--gold); }
+.score-row.rank-3 { background: rgba(255, 230, 0, 0.05); }
+
+.score-row.empty  { opacity: 0.28; }
+
+/* ── Rank Badge ── */
+.rank-badge {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-px);
+  font-size: 0.82rem;
+  border: 2px solid rgba(0, 255, 194, 0.20);
+  color: var(--toca-aqua);
+  background: rgba(10, 0, 55, 0.90);
+}
+.rank-badge.gold {
+  background: var(--toca-pink);
+  color: var(--toca-blue);
+  border-color: var(--toca-pink);
+  box-shadow: 0 0 18px rgba(255, 132, 255, 0.7), inset 0 0 8px rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+}
+.rank-badge.silver {
+  background: var(--toca-aqua);
+  color: var(--toca-blue);
+  border-color: var(--toca-aqua);
+  box-shadow: 0 0 16px rgba(0, 255, 194, 0.65), inset 0 0 8px rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+}
+.rank-badge.bronze {
+  background: var(--gold);
+  color: var(--toca-blue);
+  border-color: var(--gold);
+  box-shadow: 0 0 14px rgba(255, 230, 0, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+}
+
+/* ── Player Info ── */
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 230px;
+  flex-shrink: 0;
+  min-width: 0;
+}
+.player-name {
+  font-family: var(--font-px);
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--white);
+}
+.score-row.rank-1 .player-name { color: var(--toca-pink); text-shadow: 0 0 12px rgba(255, 132, 255, 0.7); }
+.score-row.rank-2 .player-name { color: var(--toca-aqua); text-shadow: 0 0 10px rgba(0, 255, 194, 0.6); }
+.score-row.rank-3 .player-name { color: var(--gold);      text-shadow: 0 0 10px rgba(255, 230, 0, 0.6); }
+.score-row.empty .player-name  { color: var(--dim); }
+
+.player-date {
+  font-size: 0.52rem;
+  color: var(--dim);
+  letter-spacing: 1px;
+}
+
+/* ── Segmented Progress Bar ── */
+.seg-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  overflow: hidden;
+}
+.seg-block {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 255, 194, 0.18);
+  background: transparent;
+  transition: background 0.6s ease, border-color 0.6s ease;
+}
+.seg-block.filled {
+  border-color: currentColor;
+  background: currentColor;
+}
+.rank-1 .seg-bar { color: var(--toca-pink); }
+.rank-2 .seg-bar { color: var(--toca-aqua); }
+.rank-3 .seg-bar { color: var(--gold); }
+.score-row:not(.rank-1):not(.rank-2):not(.rank-3) .seg-bar { color: var(--toca-aqua); opacity: 0.75; }
+
+/* ── Score Value ── */
+.score-value {
+  width: 180px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.score-number {
+  font-family: var(--font-px);
+  font-size: 1.10rem;
+  letter-spacing: 2px;
+  color: var(--toca-aqua);
+  line-height: 1;
+}
+.score-row.rank-1 .score-number {
+  color: var(--toca-pink);
+  font-size: 1.25rem;
+  text-shadow: 0 0 20px rgba(255, 132, 255, 0.85);
+}
+.score-row.rank-2 .score-number {
+  color: var(--toca-aqua);
+  font-size: 1.18rem;
+  text-shadow: 0 0 16px rgba(0, 255, 194, 0.75);
+}
+.score-row.rank-3 .score-number {
+  color: var(--gold);
+  font-size: 1.12rem;
+}
+.score-row.empty .score-number  { color: var(--dim); font-size: 0.80rem; }
+
+.score-pts {
+  font-family: var(--font-px);
+  font-size: 0.44rem;
+  letter-spacing: 2px;
+  color: var(--dim);
+  margin-top: 4px;
+}
+
+/* ─────────────────────────────────────────
+   FOOTER (ESPN / RETRO ARCADE LIVE TICKER)
+───────────────────────────────────────── */
+footer {
+  height: var(--h-footer);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+  border-top: 2px solid var(--toca-aqua);
+  background: rgba(5, 0, 31, 0.98);
+  box-shadow: 0 -4px 20px rgba(0, 255, 194, 0.20);
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+/* Badge EN VIVO estilo broadcast arcade */
+.footer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  background: rgba(10, 0, 55, 0.95);
+  border: 2px solid var(--toca-pink);
+  box-shadow: 0 0 14px rgba(255, 132, 255, 0.4), inset 0 0 8px rgba(255, 132, 255, 0.2);
+  flex-shrink: 0;
+  z-index: 5;
+}
+.footer-badge .badge-dot {
+  color: var(--toca-pink);
+  font-size: 0.65rem;
+  animation: blink 1s step-end infinite;
+}
+.footer-badge .badge-icon {
+  font-size: 0.85rem;
+  color: var(--gold);
+}
+.footer-badge .badge-text {
+  font-family: var(--font-px);
+  font-size: 0.56rem;
+  color: var(--toca-aqua);
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(0, 255, 194, 0.6);
+  white-space: nowrap;
+}
+
+/* Ticker marquee continuo */
+.ticker-wrapper {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0px, black 20px, black calc(100% - 20px), transparent 100%);
+}
+
+.ticker-track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  will-change: transform;
+  animation: tickerMarquee 42s linear infinite;
+}
+
+@keyframes tickerMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 20px;
+  white-space: nowrap;
+}
+
+.ticker-star {
+  color: var(--gold);
+  font-size: 0.72rem;
+  text-shadow: 0 0 8px rgba(255, 230, 0, 0.6);
+}
+
+.ticker-game-logo {
+  height: 24px;
+  max-width: 44px;
+  object-fit: contain;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 194, 0.6));
+}
+.ticker-game-icon {
+  font-size: 0.95rem;
+}
+
+.ticker-game-name {
+  font-family: var(--font-px);
+  font-size: 0.50rem;
+  color: var(--toca-aqua);
+  letter-spacing: 1.5px;
+}
+
+.ticker-sep {
+  color: var(--toca-pink);
+  font-size: 0.60rem;
+}
+
+.ticker-pname {
+  font-family: var(--font-px);
+  font-size: 0.54rem;
+  color: var(--white);
+  letter-spacing: 1px;
+}
+
+.ticker-pscore {
+  font-family: var(--font-px);
+  font-size: 0.62rem;
+  color: var(--toca-pink);
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(255, 132, 255, 0.6);
+}
+
+.ticker-cta {
+  font-family: var(--font-px);
+  font-size: 0.50rem;
+  color: var(--white);
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+.ticker-cta.highlight {
+  color: var(--toca-pink);
+  text-shadow: 0 0 8px rgba(255, 132, 255, 0.5);
+}
+
+/* ─────────────────────────────────────────
+   RECORD CELEBRATION OVERLAY
+───────────────────────────────────────── */
+.record-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(5, 0, 31, 0.96);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.record-overlay.hidden { display: none; }
+
+.rec-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 2px,
+    transparent 2px, transparent 4px
+  );
+  pointer-events: none;
+}
+
+/* Animated border flash */
+.record-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 3px solid var(--toca-pink);
+  box-shadow: 0 0 35px var(--toca-pink), inset 0 0 30px rgba(255, 132, 255, 0.1);
+  animation: blink 0.6s step-end infinite;
+}
+
+.record-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: recAppear 0.5s steps(8) forwards;
+}
+@keyframes recAppear {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.rec-border-top, .rec-border-bot {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: var(--toca-pink);
+  text-shadow: 0 0 12px rgba(255, 132, 255, 0.7);
+}
+.rec-border-bot { color: var(--toca-aqua); text-shadow: 0 0 12px rgba(0, 255, 194, 0.7); }
+
+.rec-trophy-wrap { margin: 4px 0; }
+.rec-trophy {
+  font-size: 5rem;
+  display: inline-block;
+  animation: trophySpin 2s steps(4) infinite;
+}
+@keyframes trophySpin {
+  0%   { transform: scale(1)    rotate(-3deg); }
+  25%  { transform: scale(1.1)  rotate(0deg); }
+  50%  { transform: scale(1)    rotate(3deg); }
+  75%  { transform: scale(1.05) rotate(0deg); }
+  100% { transform: scale(1)    rotate(-3deg); }
+}
+
+.rec-new-record {
+  font-family: var(--font-px);
+  font-size: 1.4rem;
+  letter-spacing: 6px;
+  color: var(--toca-aqua);
+  text-shadow: 0 0 30px rgba(0, 255, 194, 0.9);
+}
+.rec-game {
+  font-family: var(--font-px);
+  font-size: 0.75rem;
+  letter-spacing: 4px;
+  color: var(--toca-pink);
+  text-shadow: 0 0 14px rgba(255, 132, 255, 0.7);
+}
+.rec-line {
+  color: var(--toca-aqua);
+  font-size: 1rem;
+  letter-spacing: 4px;
+}
+.rec-player {
+  font-family: var(--font-px);
+  font-size: 1.8rem;
+  letter-spacing: 4px;
+  color: var(--white);
+}
+.rec-score {
+  font-family: var(--font-px);
+  font-size: 3.5rem;
+  color: var(--toca-pink);
+  letter-spacing: 4px;
+  text-shadow: 0 0 40px rgba(255, 132, 255, 0.85);
+  line-height: 1;
+}
+.rec-pts-label {
+  font-family: var(--font-px);
+  font-size: 0.60rem;
+  letter-spacing: 6px;
+  color: var(--toca-aqua);
+}
+.rec-prev {
+  font-family: var(--font-px);
+  font-size: 0.55rem;
+  letter-spacing: 1.5px;
+  color: var(--dim);
+  line-height: 1.8;
+}

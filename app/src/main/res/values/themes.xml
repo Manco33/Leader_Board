@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Simplest possible theme for a plain Activity on TV -->
+    <style name="Theme.TvTocaSocial" parent="android:Theme.Black.NoTitleBar.Fullscreen">
+    </style>
+</resources>

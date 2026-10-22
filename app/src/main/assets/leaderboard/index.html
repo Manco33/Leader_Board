@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TOCA SOCIAL — Leaderboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- CRT scanlines overlay -->
+  <div class="scanlines" aria-hidden="true"></div>
+  <!-- Screen flicker -->
+  <div class="crt-flicker" aria-hidden="true"></div>
+
+  <div id="app">
+
+    <!-- ═══ Header ═══ -->
+    <header id="header">
+      <div class="header-left">
+        <img src="toca_pixel_logo.png" alt="TOCA Social" class="toca-logo">
+      </div>
+      <div class="header-center">
+        <div class="leaderboard-pill">
+          <span class="pill-dot">●</span>
+          <h1 class="header-title">LEADERBOARD</h1>
+          <span class="pill-dot">●</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div id="clock" class="clock">--:--:--</div>
+        <div id="date-display" class="date-text"></div>
+      </div>
+    </header>
+
+    <!-- ═══ Game Tabs ═══ -->
+    <nav id="game-tabs"></nav>
+
+    <!-- ═══ Mode Toggle ═══ -->
+    <div class="mode-bar">
+      <div class="mode-label" id="mode-label-today">▶ CAMPEONES DE HOY</div>
+      <div class="mode-progress">
+        <div id="mode-progress-fill" class="mode-progress-fill"></div>
+      </div>
+      <div class="mode-label" id="mode-label-alltime">RÉCORDS HISTÓRICOS ◀</div>
+    </div>
+
+    <!-- ═══ Game Sub-header ═══ -->
+    <div id="game-header" class="game-header"></div>
+
+    <!-- ═══ Score Column Headers ═══ -->
+    <div class="list-header">
+      <span class="lh-rank">POS</span>
+      <span class="lh-name">JUGADOR</span>
+      <span class="lh-bar"></span>
+      <span class="lh-score">PUNTOS</span>
+    </div>
+
+    <!-- ═══ Score List ═══ -->
+    <main id="score-list" class="score-list"></main>
+
+    <!-- ═══ Footer ticker (ESPN / Retro Arcade) ═══ -->
+    <footer id="footer" class="footer">
+      <div class="footer-badge">
+        <span class="badge-dot">●</span>
+        <span class="badge-icon">⚡</span>
+        <span class="badge-text">EN VIVO</span>
+      </div>
+      <div class="ticker-wrapper">
+        <div id="footer-ticker-track" class="ticker-track"></div>
+      </div>
+    </footer>
+
+  </div><!-- /#app -->
+
+  <!-- ═══ Record Break Overlay ═══ -->
+  <div id="record-overlay" class="record-overlay hidden">
+    <div class="rec-scanlines"></div>
+    <div class="record-content">
+      <div class="rec-border-top">████████████████████████████████</div>
+      <div class="rec-trophy-wrap">
+        <span class="rec-trophy">🏆</span>
+      </div>
+      <div class="rec-new-record blink-text">★ NUEVO RÉCORD ★</div>
+      <div id="rec-game"   class="rec-game"></div>
+      <div class="rec-line">▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬</div>
+      <div id="rec-player" class="rec-player"></div>
+      <div id="rec-score"  class="rec-score"></div>
+      <div class="rec-pts-label">— P T S —</div>
+      <div id="rec-prev"   class="rec-prev"></div>
+      <div class="rec-border-bot">████████████████████████████████</div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
